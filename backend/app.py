@@ -2,17 +2,14 @@ from flask import Flask, jsonify, request
 from flask_cors import CORS
 import os
 from dotenv import load_dotenv
+from services import task_service # Import the task service
+from models.task_model import Task # Import the Task class for type hinting and .to_dict()
 
 # Carga las variables de entorno desde el archivo .env
 load_dotenv()
 
 app = Flask(__name__)
 CORS(app) # Habilita CORS para permitir solicitudes desde el frontend
-
-# --- Almacenamiento en memoria para las tareas ---
-tasks = []
-task_id_counter = 1
-# ------------------------------------------------
 
 @app.route('/')
 def home():
@@ -27,60 +24,57 @@ def health_check():
 # OBTENER todas las tareas
 @app.route('/api/tasks', methods=['GET'])
 def get_tasks():
-    return jsonify(tasks)
+    # Convert Task objects to dictionaries for jsonify
+    return jsonify([task.to_dict() for task in task_service.get_all_tasks()])
 
 # OBTENER una tarea específica por ID
 @app.route('/api/tasks/<int:task_id>', methods=['GET'])
 def get_task(task_id):
-    task = next((t for t in tasks if t['id'] == task_id), None)
+    task = task_service.get_task_by_id(task_id)
     if task:
-        return jsonify(task)
+        return jsonify(task.to_dict()) # Convert Task object to dictionary
     return jsonify(error="Tarea no encontrada"), 404
 
 # CREAR una nueva tarea
 @app.route('/api/tasks', methods=['POST'])
 def create_task():
-    global task_id_counter
     data = request.json
     
     if not data or 'title' not in data:
         return jsonify(error="El campo 'title' es requerido"), 400
         
-    new_task = {
-        'id': task_id_counter,
-        'title': data['title'],
-        'completed': data.get('completed', False)
-    }
-    
-    tasks.append(new_task)
-    task_id_counter += 1
-    
-    return jsonify(new_task), 201
+    try:
+        new_task = task_service.create_task(data['title'], data.get('completed', False))
+        return jsonify(new_task.to_dict()), 201 # Convert Task object to dictionary
+    except ValueError as e: # Catch validation errors from Task model
+        return jsonify(error=str(e)), 400
 
 # ACTUALIZAR una tarea existente (PUT)
 @app.route('/api/tasks/<int:task_id>', methods=['PUT'])
 def update_task(task_id):
-    task = next((t for t in tasks if t['id'] == task_id), None)
-    if not task:
-        return jsonify(error="Tarea no encontrada"), 404
-        
     data = request.json
-    task['title'] = data.get('title', task['title'])
-    task['completed'] = data.get('completed', task['completed'])
     
-    return jsonify(task)
+    # Optional: Basic validation for title/completed if provided
+    if 'title' in data and not isinstance(data['title'], str):
+        return jsonify(error="El campo 'title' debe ser una cadena de texto"), 400
+    if 'completed' in data and 'completed' in data and not isinstance(data['completed'], bool):
+        return jsonify(error="El campo 'completed' debe ser un booleano"), 400
+
+    updated_task = task_service.update_task(
+        task_id,
+        title=data.get('title'),
+        completed=data.get('completed')
+    )
+    if updated_task:
+        return jsonify(updated_task.to_dict()) # Convert Task object to dictionary
+    return jsonify(error="Tarea no encontrada"), 404
 
 # ELIMINAR una tarea
 @app.route('/api/tasks/<int:task_id>', methods=['DELETE'])
 def delete_task(task_id):
-    global tasks
-    task = next((t for t in tasks if t['id'] == task_id), None)
-    if not task:
-        return jsonify(error="Tarea no encontrada"), 404
-        
-    tasks = [t for t in tasks if t['id'] != task_id]
-    
-    return jsonify(message="Tarea eliminada exitosamente"), 200
+    if task_service.delete_task(task_id):
+        return jsonify(message="Tarea eliminada exitosamente"), 200
+    return jsonify(error="Tarea no encontrada"), 404
 
 # -----------------------------------------
 
