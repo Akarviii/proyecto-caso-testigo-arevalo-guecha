@@ -36,14 +36,14 @@ trace: 'on-first-retry',
   /* Run your local dev server before starting the tests */
   webServer: [
     {
-      command: './backend/venv/bin/python backend/app.py',
+      command: 'python backend/app.py',
       url: 'http://localhost:5000/health',
       reuseExistingServer: !process.env.CI,
       stdout: 'pipe',
       stderr: 'pipe',
       env: {
-        // Ensure the backend uses port 5000 if it's configurable
         PORT: '5000',
+        PYTHONPATH: './backend', // Add backend to PYTHONPATH for module imports
       },
     },
     {
