@@ -46,6 +46,9 @@ jobs:
       run: |
         npm install # Installs root dependencies (Playwright, if any)
         npm install --prefix frontend # Installs frontend-specific dependencies
+    
+    - name: Install Playwright Browsers # Install Playwright's browsers for the CI environment
+      run: npx playwright install --with-deps
 
     # --- Run Playwright E2E Tests ---
     - name: Run Playwright tests
