@@ -2,6 +2,8 @@
 
 Este proyecto implementa una aplicación de gestión de tareas (To-Do List) con un backend RESTful API desarrollado en Python con Flask y un frontend construido con React y TypeScript. Incluye una suite de pruebas completa (unitarias, de integración con Testcontainers y E2E con Playwright) y está diseñado siguiendo principios SOLID y patrones de diseño.
 
+video: https://youtu.be/YCPlqSB7Bx0
+
 ## Arquitectura del Proyecto
 
 El proyecto está dividido en dos componentes principales:
