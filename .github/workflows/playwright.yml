@@ -31,10 +31,7 @@ jobs:
     # --- Run Backend Integration Tests ---
     - name: Run Backend Integration Tests
       run: |
-        # Ensure Docker is ready for testcontainers (usually running by default on GitHub Actions runners)
-        # If not, you might need: sudo systemctl start docker
-        python -m pytest -v backend/tests/test_integration.py
-        # TODO: Add coverage reporting here later
+        python -m pytest -v --cov=backend --cov-report=xml backend/tests/test_integration.py
 
     # --- Setup Node.js Environment and Frontend/Playwright ---
     - name: Set up Node.js
