@@ -4,6 +4,13 @@ from models.task_model import Task # Import the Task class
 tasks: list[Task] = []
 task_id_counter = 1
 
+def _reset_state():
+    """Resets the in-memory task storage for testing purposes."""
+    global tasks
+    global task_id_counter
+    tasks = []
+    task_id_counter = 1
+
 def get_all_tasks() -> list[Task]:
     """Returns all tasks."""
     return list(tasks) # Return a copy to prevent external modification

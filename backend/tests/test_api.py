@@ -1,15 +1,14 @@
 import pytest
-import app  # Importamos el módulo 'app' directamente
-from app import app as flask_app
+from app import app as flask_app # Only import flask_app
+from services import task_service # Import task_service for resetting state
 
 # 'fixture' es un concepto de pytest.
-# Esta fixture ahora reinicia el estado directamente en el módulo 'app'
+# Esta fixture ahora reinicia el estado del servicio de tareas
 # antes de cada prueba, asegurando que no haya contaminación de estado.
 @pytest.fixture
 def client():
-    # Reiniciar el estado directamente en el módulo 'app'
-    app.tasks.clear()
-    app.task_id_counter = 1
+    # Reiniciar el estado del servicio de tareas
+    task_service._reset_state()
     with flask_app.test_client() as client:
         yield client
 
