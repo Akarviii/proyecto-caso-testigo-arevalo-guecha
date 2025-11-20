@@ -1,0 +1,22 @@
+{
+  "name": "proyecto-caso-testigo-arevalo-guecha",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Akarviii/proyecto-caso-testigo-arevalo-guecha.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Akarviii/proyecto-caso-testigo-arevalo-guecha/issues"
+  },
+  "homepage": "https://github.com/Akarviii/proyecto-caso-testigo-arevalo-guecha#readme",
+  "devDependencies": {
+    "@playwright/test": "^1.56.1",
+    "@types/node": "^24.10.1"
+  }
+}
