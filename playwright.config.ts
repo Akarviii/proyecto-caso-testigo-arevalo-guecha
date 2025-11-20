@@ -36,7 +36,7 @@ trace: 'on-first-retry',
   /* Run your local dev server before starting the tests */
   webServer: [
     {
-      command: '.\\backend\\venv\\Scripts\\python.exe .\\backend\\app.py',
+      command: './backend/venv/bin/python backend/app.py',
       url: 'http://localhost:5000/health',
       reuseExistingServer: !process.env.CI,
       stdout: 'pipe',
