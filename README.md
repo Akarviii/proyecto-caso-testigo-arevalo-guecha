@@ -151,5 +151,3 @@ Los endpoints disponibles en el backend son:
 -   Implementación de una base de datos persistente (ej. PostgreSQL) en lugar del almacenamiento en memoria.
 -   Autenticación y autorización para la API.
 -   Mejoras en la interfaz de usuario del frontend (ej. edición de tareas, filtros).
--   Implementación completa de un pipeline CI/CD con despliegue.
--   Generación de reporte de cobertura de pruebas y alcanzando >80%.
